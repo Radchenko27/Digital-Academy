@@ -6,6 +6,12 @@ from django.views import View
 from django.views.generic import ListView, DetailView
 from django.template.loader import render_to_string
 from django.shortcuts import render
+from .forms import FeedbackForm
+from django.shortcuts import render, redirect
+from django.core.mail import send_mail
+from .forms import ProjectForm
+from .forms import TaskForm
+
 
 # -----------------------FBV-Function  Based Views---------------------------------
 # --------------------index-----------------------------------------------
@@ -44,6 +50,7 @@ def index(request):
 def project_list(request):
     projects = Project.objects.all()
     return render(request, 'tasks/projects_list.html', {'project_list': projects})
+
 
 # ----------------------project_detail---------------------------------
 
@@ -95,4 +102,45 @@ def task_detail(request, project_id, task_id):
 #     model = Task
 #     pk_url_kwarg = 'task_id'
 #     template_name = 'tasks/task_detail.html'
+
+def feedback_view(request):
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            # Обработка данных формы
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            message = form.cleaned_data['message']
+            recipients = ['info@example.com']
+            recipients.append(email)
+            send_mail(name, message, email, recipients)
+            return redirect('/')
+    else:
+        form = FeedbackForm()
+    return render(request, 'tasks/feedback.html', {'form': form})
+
+
+def project_create(request):
+    if request.method == 'POST':
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('tasks:project_list')
+    else:
+        form = ProjectForm()
+    return render(request, "tasks/project_create.html", {'form': form})
+
+
+def add_task_to_project(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+    if request.method == 'POST':
+        form = TaskForm(request.POST)
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.project = project
+            task.save()
+            return redirect("tasks:project_detail", project_id = project_id)
+    else:
+        form = TaskForm()
+    return render(request, "tasks/add_task.html", {'form': form, "project": project})
 
