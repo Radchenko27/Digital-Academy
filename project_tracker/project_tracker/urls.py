@@ -20,7 +20,7 @@ from tasks.views import index
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("task/", index),
+    path("tasks/", index),
     path("", include("tasks.urls")),
 ]
 
