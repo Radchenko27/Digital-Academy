@@ -11,6 +11,7 @@ class FeedbackForm(forms.Form):
     message = forms.CharField(widget=forms.Textarea, label="Сообщение")
 
 
+
 class ProjectForm(ModelForm):
     class Meta:
         model = Project
