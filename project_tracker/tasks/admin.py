@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Project, Task
+from quality_control.admin import BugReportInline, FeatureReportInline
 
 
 # Register your models here.
@@ -23,9 +24,8 @@ class ProjectAdmin(admin.ModelAdmin):
     search_fields = ("name", "description")
     ordering = ('created_at',)
     date_hierarchy = "created_at"
-
     # Подключение inline для Task
-    inlines = [TaskInline]
+    inlines = [TaskInline, BugReportInline, FeatureReportInline]
 
 
 # Класс администратора для модели Task
@@ -36,3 +36,7 @@ class TaskAdmin(admin.ModelAdmin):
     search_fields = ('name', 'description')
     list_editable = ('status', 'assignee')
     readonly_fields = ('created_at', 'update_at')
+    inlines = [BugReportInline, FeatureReportInline ]
+
+
+
