@@ -17,10 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from tasks.views import index
+from quality_control.views import index_1
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("tasks/", index),
-    path("", include("tasks.urls")),
+    path('tasks/', include("tasks.urls")),
+    path("quality_control/", index_1),
+    path("", include("quality_control.urls")),
 ]
 
