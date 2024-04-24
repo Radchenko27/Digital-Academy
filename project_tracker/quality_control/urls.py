@@ -12,5 +12,8 @@ urlpatterns = [
     # path('bugs/<int:bug_id>/', views.BugReportDetailView.as_view(), name='bug_detail'),
     path('features/<int:feature_id>/', views.feature_detail, name='feature_detail'),
     # path('features/<int:feature_id>/', views.FeatureRequestView.as_view(), name='feature_detail'),
+    path('bugs/new_bug/', views.create_BugReport, name='create_BugReport'),
+    path('feature/new_feature/', views.create_FeatureRequest, name='create_FeatureRequest'),
+
 ]
 

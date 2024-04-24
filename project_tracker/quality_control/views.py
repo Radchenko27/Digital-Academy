@@ -1,9 +1,10 @@
 from django.urls import reverse
 from django.http import HttpResponse
 from .models import BugReport, FeatureRequest
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.views import View
 from django.views.generic import DetailView
+from .forms import FeatureRequestForm, BugReportForm
 
 
 # Create your views here.
@@ -70,6 +71,7 @@ def bug_detail(request, bug_id):
     return render(request, 'quality_control/bug_detail.html', {'bug': bug})
 
 
+# -----------Function feature_detail----------------------------------------
 # def feature_detail(request, feature_id):
 #     feature = get_object_or_404(FeatureRequest, id=feature_id)
 #     html = (f'<h1>{feature.title}</h1>'
@@ -84,6 +86,29 @@ def bug_detail(request, bug_id):
 def feature_detail(request, feature_id):
     feature = get_object_or_404(FeatureRequest, id=feature_id)
     return render(request, 'quality_control/feature_detail.html', {'feature': feature})
+
+
+# --------- Function for Forms------------------------------------------------
+def create_BugReport(request):
+    if request.method == "POST":
+        form = BugReportForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("quality_control:bug_list")
+    else:
+        form = BugReportForm()
+    return render(request, 'quality_control/bug_report_form.html', {'form': form})
+
+
+def create_FeatureRequest(request):
+    if request.method == "POST":
+        form = FeatureRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("quality_control:feature_list")
+    else:
+        form = FeatureRequestForm()
+    return render(request, 'quality_control/feature_request_form.html', {'form': form})
 
 # ------------------------Class Based Views---------------------------------------------------------------------------------------------------------------
 # class Index_1_View(View):
