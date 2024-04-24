@@ -110,6 +110,43 @@ def create_FeatureRequest(request):
         form = FeatureRequestForm()
     return render(request, 'quality_control/feature_request_form.html', {'form': form})
 
+
+# --------- Functions for Update----------------------------------------------------------------------
+def update_BugReport(request, bug_id):
+    bug = get_object_or_404(BugReport, id=bug_id)
+    if request.method == 'POST':
+        form = BugReportForm(request.POST, instance=bug)
+        if form.is_valid():
+            form.save()
+            return redirect('quality_control:bug_detail', bug_id=bug_id)
+    else:
+        form = BugReportForm(instance=bug)
+    return render(request, 'quality_control/bug_report_update.html', {'bug': bug, 'form': form})
+
+
+def update_FeatureRequest(request, feature_id):
+    feature = get_object_or_404(FeatureRequest, id=feature_id)
+    if request.method == 'POST':
+        form = FeatureRequestForm(request.POST, instance=feature)
+        if form.is_valid():
+            form.save()
+            return redirect('quality_control:feature_detail', feature_id=feature_id)
+    else:
+        form = FeatureRequestForm(instance=feature)
+    return render(request, 'quality_control/feature_request_update.html', {'feature': feature, 'form': form})
+
+# --------- Functions for Delete----------------------------------------------------------------------
+
+def delete_BugReport(request, bug_id):
+    bug = get_object_or_404(BugReport, id=bug_id)
+    bug.delete()
+    return redirect('quality_control:bug_list')
+
+def delete_FeatureRequest(request, feature_id):
+    feature = get_object_or_404(FeatureRequest, id=feature_id)
+    feature.delete()
+    return redirect('quality_control:feature_list')
+
 # ------------------------Class Based Views---------------------------------------------------------------------------------------------------------------
 # class Index_1_View(View):
 #     def get(self, request, *args, **kwargs):
